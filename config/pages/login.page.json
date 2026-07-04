@@ -1,0 +1,63 @@
+{
+  "id": "login",
+  "description": "Sign-in page for the Pakistan GR services portal (pk-gr-services.gvcworld.eu)",
+  "match": {
+    "urlIncludes": "pk-gr-services.gvcworld.eu",
+    "titleEquals": "Visa | Login"
+  },
+  "elements": {
+    "username": {
+      "kind": "input",
+      "inputType": "text",
+      "selector": "#username",
+      "label": "Username or E-mail",
+      "required": true,
+      "source": { "type": "env", "key": "GR_USERNAME" }
+    },
+    "password": {
+      "kind": "input",
+      "inputType": "password",
+      "selector": "#password",
+      "label": "Password",
+      "required": true,
+      "sensitive": true,
+      "source": { "type": "env", "key": "GR_PASSWORD" }
+    },
+    "destination": {
+      "kind": "input",
+      "inputType": "hidden",
+      "selector": "#destination",
+      "required": false,
+      "managedByPage": true,
+      "note": "Populated by the page's own JS; automation should not set this."
+    },
+    "recaptcha": {
+      "kind": "captcha",
+      "provider": "recaptcha-v2-checkbox",
+      "widgetSelector": "#recaptcha",
+      "responseSelector": "#g-recaptcha-response",
+      "sitekey": "6LcnlCoUAAAAAJLjWXXaByTFyuOLf4K0gGu5r3d2",
+      "note": "Visible checkbox challenge. Solved automatically via CapSolver if CAPSOLVER_API_KEY is set, otherwise falls back to waiting for a human to solve it in the headed browser."
+    },
+    "submit": {
+      "kind": "button",
+      "selector": "#btn-login",
+      "label": "Sign in"
+    }
+  },
+  "steps": [
+    { "element": "username", "action": "fill", "waitFor": "visible" },
+    { "element": "password", "action": "fill", "waitFor": "visible" },
+    {
+      "element": "recaptcha",
+      "action": "solveCaptcha",
+      "instructions": "Solve the reCAPTCHA checkbox challenge in the open browser window.",
+      "timeoutMs": 120000
+    },
+    { "element": "submit", "action": "click", "waitFor": "enabled" }
+  ],
+  "onSuccess": {
+    "waitFor": "navigation",
+    "timeoutMs": 30000
+  }
+}

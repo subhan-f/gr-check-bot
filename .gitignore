@@ -1,0 +1,4 @@
+node_modules/
+.env
+analysis/page.html
+analysis/elements.raw.json
